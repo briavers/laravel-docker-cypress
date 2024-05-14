@@ -1,10 +1,10 @@
-FROM robsontenorio/laravel:1.0
+FROM robsontenorio/laravel:3.3
 
-LABEL maintainer="Robson Tenório"
-LABEL site="https://github.com/robsontenorio/laravel-docker-cypress"
+LABEL maintainer="Brian Verschoore"
+LABEL site="https://github.com/briavers/laravel-docker-cypress"
 
-ENV DEBIAN_FRONTEND=noninteractive 
-ENV TERM xterm 
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TERM xterm
 ENV npm_config_loglevel warn
 ENV npm_config_unsafe_perm true
 ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
@@ -12,6 +12,8 @@ ENV CHROME_VERSION 90.0.4430.212
 ENV FIREFOX_VERSION 88.0.1
 ENV CI=1
 ENV CYPRESS_CACHE_FOLDER=/root/.cache/Cypress
+
+USER root
 
 RUN apt update && apt install -y \
     # Cypress dependencies
@@ -27,10 +29,10 @@ RUN apt update && apt install -y \
     xauth \
     xvfb \
     # Extra dependencies
-    fonts-liberation \ 
-    libappindicator3-1 \ 
-    xdg-utils \ 
-    mplayer \ 
+    fonts-liberation \
+    libappindicator3-1 \
+    xdg-utils \
+    mplayer \
     apt-utils \
     wget
 
