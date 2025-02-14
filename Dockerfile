@@ -1,32 +1,31 @@
-FROM robsontenorio/laravel:3.3
+FROM robsontenorio/laravel:3.5
 
 LABEL maintainer="Brian Verschoore"
 LABEL site="https://github.com/briavers/laravel-docker-cypress"
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV TERM xterm
-ENV npm_config_loglevel warn
-ENV npm_config_unsafe_perm true
+ENV TERM=xterm
+ENV npm_config_loglevel=warn
+ENV npm_config_unsafe_perm=true
 ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
-ENV CHROME_VERSION 90.0.4430.212
-ENV FIREFOX_VERSION 88.0.1
+ENV CHROME_VERSION=132.0.6834.83
+ENV FIREFOX_VERSION=125.0.3
 ENV CI=1
 ENV CYPRESS_CACHE_FOLDER=/root/.cache/Cypress
 
 USER root
 
 RUN apt update && apt install -y \
-    # Cypress dependencies
-    libgtk2.0-0 \
-    libgtk-3-0 \
-    libgbm-dev \
-    libnotify-dev \
-    libgconf-2-4 \
-    libnss3 \
-    libxss1 \
-    libasound2 \
-    libxtst6 \
-    xauth \
+    # Cypress dependencies \
+    libgtk2.0-0t64  \
+    libgtk-3-0t64  \
+    libgbm-dev  \
+    libnotify-dev  \
+    libnss3  \
+    libxss1  \
+    libasound2t64  \
+    libxtst6  \
+    xauth  \
     xvfb \
     # Extra dependencies
     fonts-liberation \
@@ -34,6 +33,7 @@ RUN apt update && apt install -y \
     xdg-utils \
     mplayer \
     apt-utils \
+    bzip2 \
     wget
 
 # Chrome
@@ -43,7 +43,8 @@ RUN wget -O /usr/src/google-chrome-stable_current_amd64.deb "http://dl.google.co
     rm -f /usr/src/google-chrome-stable_current_amd64.deb
 
 # Firefox
-RUN wget --no-verbose -O /tmp/firefox.tar.bz2 "https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2" \
-    && tar -C /opt -xjf /tmp/firefox.tar.bz2 \
-    && rm /tmp/firefox.tar.bz2 \
-    && ln -fs /opt/firefox/firefox /usr/bin/firefox
+RUN cd /opt && wget -O firefox.tar.bz2 "https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2"
+
+RUN cd /opt && tar -xvf firefox.tar.bz2
+RUN cd /opt && rm firefox.tar.bz2
+RUN cd /opt && ln -s /opt/firefox/firefox /usr/bin/firefox
